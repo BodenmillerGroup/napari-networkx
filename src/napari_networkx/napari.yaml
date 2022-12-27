@@ -1,0 +1,24 @@
+name: napari-networkx
+display_name: napari-networkx
+contributions:
+  commands:
+    - id: napari-networkx.get_reader
+      python_name: napari_networkx._reader:napari_get_reader
+      title: Open data with napari-networkx
+    - id: napari-networkx.write_multiple
+      python_name: napari_networkx._writer:write_multiple
+      title: Save multi-layer data with napari-networkx
+    - id: napari-networkx.write_single_image
+      python_name: napari_networkx._writer:write_single_image
+      title: Save image data with napari-networkx
+  readers:
+    - command: napari-networkx.get_reader
+      accepts_directories: false
+      filename_patterns: ['*.npy']
+  writers:
+    - command: napari-networkx.write_multiple
+      layer_types: ['image*','labels*']
+      filename_extensions: []
+    - command: napari-networkx.write_single_image
+      layer_types: ['image']
+      filename_extensions: ['.npy']
