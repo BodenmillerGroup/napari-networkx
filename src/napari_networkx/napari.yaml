@@ -5,20 +5,77 @@ contributions:
     - id: napari-networkx.get_reader
       python_name: napari_networkx._reader:napari_get_reader
       title: Open data with napari-networkx
-    - id: napari-networkx.write_multiple
-      python_name: napari_networkx._writer:write_multiple
-      title: Save multi-layer data with napari-networkx
-    - id: napari-networkx.write_single_image
-      python_name: napari_networkx._writer:write_single_image
-      title: Save image data with napari-networkx
+    - id: napari-networkx.write_graph
+      python_name: napari_networkx._writer:write_graph
+      title: Save graph data with napari-networkx
   readers:
     - command: napari-networkx.get_reader
+      filename_patterns:
+        - "*.adjlist"
+        - "*.adjlist.gz"
+        - "*.adjlist.bz2"
+        - "*.multiline-adjlist"
+        - "*.multiline-adjlist.gz"
+        - "*.multiline-adjlist.bz2"
+        - "*.edgelist"
+        - "*.edgelist.gz"
+        - "*.edgelist.bz2"
+        - "*.weighted-edgelist"
+        - "*.weighted-edgelist.gz"
+        - "*.weighted-edgelist.bz2"
+        - "*.gexf"
+        - "*.gexf.gz"
+        - "*.gexf.bz2"
+        - "*.gml"
+        - "*.gml.gz"
+        - "*.gml.bz2"
+        - "*.graphml"
+        - "*.graphml.gz"
+        - "*.graphml.bz2"
+        - "*.leda"
+        - "*.leda.gz"
+        - "*.leda.bz2"
+        - "*.graph6"
+        - "*.graph6.gz"
+        - "*.graph6.bz2"
+        - "*.sparse6"
+        - "*.sparse6.gz"
+        - "*.sparse6.bz2"
+        - "*.net"
+        - "*.net.gz"
+        - "*.net.bz2"
       accepts_directories: false
-      filename_patterns: ['*.npy']
   writers:
-    - command: napari-networkx.write_multiple
-      layer_types: ['image*','labels*']
-      filename_extensions: []
-    - command: napari-networkx.write_single_image
-      layer_types: ['image']
-      filename_extensions: ['.npy']
+    - command: napari-networkx.write_graph
+      layer_types: ['graph']
+      filename_extensions:
+        - .adjlist
+        - .adjlist.gz
+        - .adjlist.bz2
+        - .multiline-adjlist
+        - .multiline-adjlist.gz
+        - .multiline-adjlist.bz2
+        - .edgelist
+        - .edgelist.gz
+        - .edgelist.bz2
+        - .weighted-edgelist
+        - .weighted-edgelist.gz
+        - .weighted-edgelist.bz2
+        - .gexf
+        - .gexf.gz
+        - .gexf.bz2
+        - .gml
+        - .gml.gz
+        - .gml.bz2
+        - .graphml
+        - .graphml.gz
+        - .graphml.bz2
+        - .graph6
+        - .graph6.gz
+        - .graph6.bz2
+        - .sparse6
+        - .sparse6.gz
+        - .sparse6.bz2
+        - .net
+        - .net.gz
+        - .net.bz2

@@ -1,72 +1,52 @@
-"""
-This module is an example of a barebones numpy reader plugin for napari.
+import os
+from functools import partial
+from pathlib import Path
+from typing import Callable, Dict, List, Optional, Union
 
-It implements the Reader specification, but your plugin may choose to
-implement multiple readers or even other plugin contributions. see:
-https://napari.org/stable/plugins/guides.html?#readers
-"""
-import numpy as np
+import networkx as nx
+from napari.types import LayerDataTuple
+
+from .utils import nx_graph_to_napari_graph
+
+PathLike = Union[str, os.PathLike]
+NXReaderFunction = Callable[[PathLike], nx.Graph]
 
 
-def napari_get_reader(path):
-    """A basic implementation of a Reader contribution.
+# don't forget to update filename_patterns in napari.yaml!
+NX_READER_FUNCTIONS: Dict[str, NXReaderFunction] = {
+    ".adjlist": nx.read_adjlist,
+    ".multiline-adjlist": nx.read_multiline_adjlist,
+    ".edgelist": nx.read_edgelist,
+    ".weighted-edgelist": nx.read_weighted_edgelist,
+    ".gexf": nx.read_gexf,
+    ".gml": nx.read_gml,
+    ".graphml": nx.read_graphml,
+    ".leda": nx.read_leda,
+    ".graph6": nx.read_graph6,
+    ".sparse6": nx.read_sparse6,
+    ".net": nx.read_pajek,
+}
 
-    Parameters
-    ----------
-    path : str or list of str
-        Path to file, or list of paths.
 
-    Returns
-    -------
-    function or None
-        If the path is a recognized format, return a function that accepts the
-        same path or list of paths, and returns a list of layer data tuples.
-    """
+def napari_get_reader(
+    path: PathLike,
+) -> Optional[Callable[[PathLike], List[LayerDataTuple]]]:
     if isinstance(path, list):
-        # reader plugins may be handed single path, or a list of paths.
-        # if it is a list, it is assumed to be an image stack...
-        # so we are only going to look at the first file.
-        path = path[0]
+        raise ValueError("Can only open single graph file")
+    suffix = Path(path).suffix.lower()
+    if suffix in (".gz", ".bz2"):
+        suffix = Path(path).with_suffix("").suffix.lower()
+    nx_reader_function = NX_READER_FUNCTIONS.get(suffix)
+    if nx_reader_function is not None:
+        return partial(
+            graph_reader_function, nx_reader_function=nx_reader_function
+        )
+    return None
 
-    # if we know we cannot read the file, we immediately return None.
-    if not path.endswith(".npy"):
-        return None
 
-    # otherwise we return the *function* that can read ``path``.
-    return reader_function
-
-
-def reader_function(path):
-    """Take a path or list of paths and return a list of LayerData tuples.
-
-    Readers are expected to return data as a list of tuples, where each tuple
-    is (data, [add_kwargs, [layer_type]]), "add_kwargs" and "layer_type" are
-    both optional.
-
-    Parameters
-    ----------
-    path : str or list of str
-        Path to file, or list of paths.
-
-    Returns
-    -------
-    layer_data : list of tuples
-        A list of LayerData tuples where each tuple in the list contains
-        (data, metadata, layer_type), where data is a numpy array, metadata is
-        a dict of keyword arguments for the corresponding viewer.add_* method
-        in napari, and layer_type is a lower-case string naming the type of
-        layer. Both "meta", and "layer_type" are optional. napari will
-        default to layer_type=="image" if not provided
-    """
-    # handle both a string and a list of strings
-    paths = [path] if isinstance(path, str) else path
-    # load all files into array
-    arrays = [np.load(_path) for _path in paths]
-    # stack arrays into single array
-    data = np.squeeze(np.stack(arrays))
-
-    # optional kwargs for the corresponding viewer.add_* method
-    add_kwargs = {}
-
-    layer_type = "image"  # optional, default is "image"
-    return [(data, add_kwargs, layer_type)]
+def graph_reader_function(
+    path: PathLike, nx_reader_function: NXReaderFunction
+) -> List[LayerDataTuple]:
+    nx_graph = nx_reader_function(path)
+    napari_graph = nx_graph_to_napari_graph(nx_graph)
+    return [(napari_graph, {}, "graph")]
