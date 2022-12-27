@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/BodenmillerGroup/napari-networkx/branch/main/graph/badge.svg)](https://codecov.io/gh/BodenmillerGroup/napari-networkx)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-networkx)](https://napari-hub.org/plugins/napari-networkx)
 
-Read and write spatial graphs using networkx
+A napari plugin to read and write spatial graphs using networkx
 
 ----------------------------------
 
