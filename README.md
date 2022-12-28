@@ -15,11 +15,17 @@ This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookie
 
 ## Installation
 
+During development of the graph layer, pre-install the following dependencies:
+
+    pip install "git+https://github.com/JoOkuma/napari-graph.git@undirected-graph#egg=napari-graph"
+    pip install "git+https://github.com/JoOkuma/napari.git@graph-layer#egg=napari[all]"
+    pip install "git+https://github.com/jwindhager/npe2@graph-layer#egg=npe2"
+
 You can install `napari-networkx` via [pip]:
 
     pip install napari-networkx
 
-To install latest development version :
+To install latest development version:
 
     pip install git+https://github.com/BodenmillerGroup/napari-networkx.git
 
