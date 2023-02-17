@@ -1,5 +1,8 @@
 # napari-networkx
 
+> **Warning**
+> This repository has been archived, please refer to [jwindhager/napari-networkx](https://github.com/jwindhager/napari-networkx).
+
 [![License MIT](https://img.shields.io/pypi/l/napari-networkx.svg?color=green)](https://github.com/BodenmillerGroup/napari-networkx/raw/main/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/napari-networkx.svg?color=green)](https://pypi.org/project/napari-networkx)
 [![Python Version](https://img.shields.io/pypi/pyversions/napari-networkx.svg?color=green)](https://python.org)
